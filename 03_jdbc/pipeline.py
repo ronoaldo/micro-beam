@@ -41,7 +41,7 @@ class DebugDoFn(beam.DoFn):
         yield element
 
 if __name__ == "__main__":
-    logging.getLogger().setLevel(logging.INFO)
+    LOG.setLevel(logging.INFO)
     options = PipelineOptions(sys.argv[1:])
     with beam.Pipeline(options=options) as p:        
         clientes = p | "ReadPlayers" >>  ReadFromJdbc(

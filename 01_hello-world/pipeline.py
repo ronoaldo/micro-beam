@@ -7,6 +7,7 @@ LOG = logging.getLogger("hello-world")
 file = "gs://dataflow-samples/shakespeare/kinglear.txt"
 
 def split_words(line):
+    # TODO(leitor): você consegue melhorar esse código para capturar palavras?
     words = line.split(' ')
     for w in words:
         yield (w.strip(), 1)
@@ -17,6 +18,7 @@ class PrintElementFn(beam.DoFn):
         yield element
 
 if __name__ == "__main__":
+    # Dica: troque o nível para INFO ou DEBUG para ver mais dados dos logs!
     LOG.setLevel(logging.WARNING)
     with beam.Pipeline() as p:
         lines = p | beam.io.ReadFromText(file)
