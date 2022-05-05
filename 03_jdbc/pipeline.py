@@ -11,8 +11,6 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam import coders
 from apache_beam.typehints.schemas import LogicalType
 
-LOG = logging.getLogger("pipeline")
-
 # Estre trecho é um workaround para evitar erros na transformação
 # cross-language utilizada no io.jdbc.ReadFromJdbc.
 #
@@ -37,11 +35,11 @@ class VarcharLogicalType(LogicalType):
 
 class DebugDoFn(beam.DoFn):
     def process(self, element):
-        LOG.info("Element of type %r => %r" % (type(element), element))
+        logging.info("Element of type %r => %r" % (type(element), element))
         yield element
 
 if __name__ == "__main__":
-    LOG.setLevel(logging.INFO)
+    logging.getLogger().setLevel(logging.INFO)
     options = PipelineOptions(sys.argv[1:])
     with beam.Pipeline(options=options) as p:        
         clientes = p | "ReadPlayers" >>  ReadFromJdbc(
