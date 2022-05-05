@@ -2,8 +2,6 @@ import apache_beam as beam
 import sys
 import logging
 
-LOG = logging.getLogger("hello-world")
-
 file = "gs://dataflow-samples/shakespeare/kinglear.txt"
 
 def split_words(line):
@@ -14,16 +12,19 @@ def split_words(line):
 
 class PrintElementFn(beam.DoFn):
     def process(self, element):
-        LOG.debug("Element of type %r => %r" % (type(element), element))
+        logging.debug("Element of type %r => %r" % (type(element), element))
         yield element
 
 if __name__ == "__main__":
-    # Dica: troque o nível para INFO ou DEBUG para ver mais dados dos logs!
-    LOG.setLevel(logging.WARNING)
-    with beam.Pipeline() as p:
+    # Dica: troque o nível para DEBUG para ver mais dados dos logs, localmente e na nuvem.
+    logging.getLogger().setLevel(logging.INFO)
+
+    # Este é uma talho para podermos trocar o runner na hora de executar
+    opts = beam.options.pipeline_options.PipelineOptions(sys.argv[1:])
+
+    with beam.Pipeline(options=opts) as p:
         lines = p | beam.io.ReadFromText(file)
         words = lines | 'ExtrairPalavras' >> beam.FlatMap(split_words)
         counts = words | 'CountarOsElementos' >> beam.CombinePerKey(sum)
         counts | 'DebugElements' >> beam.ParDo(PrintElementFn())
         counts | beam.io.WriteToText("data/out/word-count")
-        p.run()

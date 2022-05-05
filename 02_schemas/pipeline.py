@@ -33,4 +33,3 @@ if __name__ == "__main__":
             'PorCidade' >> beam.GroupBy('cidade') |
             'Count2' >> beam.combiners.Count.Globally() |
             'QuantasCidades2' >> beam.io.WriteToText('data/out/quantas-cidades_com-schema'))
-        p.run()
