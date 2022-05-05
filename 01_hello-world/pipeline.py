@@ -12,12 +12,14 @@ def split_words(line):
 
 class PrintElementFn(beam.DoFn):
     def process(self, element):
-        logging.debug("Element of type %r => %r" % (type(element), element))
+        LOG = logging.getLogger("pipeline")
+        LOG.info("Element of type %r => %r" % (type(element), element))
         yield element
 
 if __name__ == "__main__":
-    # Dica: troque o nível para DEBUG para ver mais dados dos logs, localmente e na nuvem.
-    logging.getLogger().setLevel(logging.INFO)
+    # Dica: troque o nível para INFO para ver mais dados dos logs, localmente e na nuvem.
+    LOG = logging.getLogger("pipeline")
+    LOG.setLevel(logging.WARNING)
 
     # Este é uma talho para podermos trocar o runner na hora de executar
     opts = beam.options.pipeline_options.PipelineOptions(sys.argv[1:])
@@ -25,6 +27,6 @@ if __name__ == "__main__":
     with beam.Pipeline(options=opts) as p:
         lines = p | beam.io.ReadFromText(file)
         words = lines | 'ExtrairPalavras' >> beam.FlatMap(split_words)
-        counts = words | 'CountarOsElementos' >> beam.CombinePerKey(sum)
+        counts = words | 'ContarOsElementos' >> beam.CombinePerKey(sum)
         counts | 'DebugElements' >> beam.ParDo(PrintElementFn())
         counts | beam.io.WriteToText("data/out/word-count")
