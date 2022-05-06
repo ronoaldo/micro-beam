@@ -17,7 +17,8 @@ class PrintElementFn(beam.DoFn):
         yield element
 
 if __name__ == "__main__":
-    # Dica: troque o nível para INFO para ver mais dados dos logs, localmente e na nuvem.
+    # Dica: troque o nível para INFO para ver mais dados dos logs,
+    # localmente e na nuvem.
     LOG = logging.getLogger("pipeline")
     LOG.setLevel(logging.WARNING)
 

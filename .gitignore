@@ -1,1 +1,3 @@
 */data/out/*
+env/*
+__pycache__
