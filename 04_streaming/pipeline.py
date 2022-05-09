@@ -5,10 +5,10 @@ import apache_beam.transforms.window as window
 import apache_beam.io.fileio as fileio
 
 # TODO(leitor): crie sua subscription com este comando:
-# gcloud pubsub subscriptions create MINHA_SUB \
+# gcloud pubsub subscriptions create shakespeare-kinglear \
 #   --project=MEU_PROJETO \
 #   --topic=projects/pubsub-public-data/topics/shakespeare-kinglear
-subscription = "projects/ronoaldo-data-engineering/subscriptions/ronoaldo"
+subscription = "projects/ronoaldo-data-engineering/subscriptions/shakespeare-kinglear"
 
 def split_words(line):
     # TODO(leitor): você consegue melhorar esse código para capturar palavras?
