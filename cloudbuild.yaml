@@ -5,6 +5,7 @@ steps:
     args: ["install", "-r", "requirements.txt"]
   # Run tests
   - name: python
+    entrypoint: python
     args: ["-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"]
 
 artifacts:
