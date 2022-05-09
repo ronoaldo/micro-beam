@@ -1,0 +1,14 @@
+steps:
+  # Install dependencies
+  - name: python
+    entrypoint: pip
+    args: ["install", "-r", "requirements.txt"]
+  # Run tests
+  - name: python
+    args: ["-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"]
+
+artifacts:
+  objects:
+    location: gs://${PROJECT_ID}/micro-beam/tests/
+    paths:
+      - ${SHORT_SHA}_test_log.xml
