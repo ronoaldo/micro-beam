@@ -37,7 +37,7 @@ if __name__ == "__main__":
     LOG = logging.getLogger("pipeline")
     LOG.setLevel(logging.WARNING)
 
-    # Este é uma talho para podermos trocar o runner na hora de executar
+    # Este é um atalho para podermos trocar o runner na hora de executar
     opts = beam.options.pipeline_options.PipelineOptions(sys.argv[1:])
     # Necessário para marcar como pipeline de streamming
     opts.view_as(beam.options.pipeline_options.StandardOptions).streaming = True

@@ -11,10 +11,9 @@ from apache_beam.options.pipeline_options import PipelineOptions
 from apache_beam import coders
 from apache_beam.typehints.schemas import LogicalType
 
-# Estre trecho é um workaround para evitar erros na transformação
-# cross-language utilizada no io.jdbc.ReadFromJdbc.
+# Mapeia o tipo lógico na transformação xlang (Java -> Python).
+# Necessário para evitar erros.
 #
-# Bug: https://issues.apache.org/jira/browse/BEAM-10750
 # Workaround: https://stackoverflow.com/a/71265662/1331641
 #             (levemente modificado abaixo p/ Python 3.9)
 @LogicalType.register_logical_type
@@ -42,13 +41,16 @@ if __name__ == "__main__":
     logging.getLogger().setLevel(logging.INFO)
     options = PipelineOptions(sys.argv[1:])
     with beam.Pipeline(options=options) as p:        
-        clientes = p | "ReadPlayers" >>  ReadFromJdbc(
+        rows = p | "LerDoBD" >>  ReadFromJdbc(
             table_name="clientes",
+            query="SELECT nome,cpf FROM clientes",
             driver_class_name="org.postgresql.Driver",
             jdbc_url="jdbc:postgresql://localhost:5432/mydb",
             username="test",
             password="secret")
-        (clientes
+
+        rows | "DebugRows" >> beam.ParDo(DebugDoFn())
+
+        (rows
             | "ToJson" >> beam.Map(lambda row: json.dumps(row))
-            | "DebugRows" >> beam.ParDo(DebugDoFn())
             | "WriteToFile" >> WriteToText("data/out/clientes"))
