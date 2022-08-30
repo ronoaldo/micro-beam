@@ -5,3 +5,5 @@ __pycache__
 .pytest_cache
 **/target/
 .vscode
+*.egg-info
+dist

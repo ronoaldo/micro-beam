@@ -3,6 +3,7 @@ package com.ronoaldo;
 import java.util.Arrays;
 
 import org.apache.beam.sdk.expansion.service.ExpansionService;
+import org.apache.beam.sdk.transforms.Filter;
 import org.apache.beam.sdk.transforms.FlatMapElements;
 import org.apache.beam.sdk.transforms.PTransform;
 import org.apache.beam.sdk.values.PCollection;
@@ -17,7 +18,8 @@ public class SplitWordsFromJava extends PTransform<PCollection<String>, PCollect
     @Override
     public PCollection<String> expand(PCollection<String> input) {
         return input.apply(FlatMapElements.into(TypeDescriptors.strings())
-                .via((String line) -> Arrays.asList(line.split("[^\\p{L}]+"))));
+                .via((String line) -> Arrays.asList(line.split("[^\\p{L}]+"))))
+                .apply(Filter.by((String word) -> !word.isEmpty()));
     }
 
     // Bundle the Java expansion server.

@@ -21,7 +21,7 @@ class SplitWords(beam.PTransform):
         self.expansion_service = expansion_service
 
     def expand(self, pcoll):
-        if self.expansion_service == "":
+        if not self.expansion_service:
             logging.info("Usando SplitWordsFromPython")
             return pcoll | "SplitWordsFromPython" >> splitwords.SplitWordsFromPython()
         else:
@@ -36,7 +36,8 @@ if __name__ == "__main__":
 
     # Usando o argparse para receber o endereço do serviço de expansão
     parser = argparse.ArgumentParser()
-    parser.add_argument("--java_expansion_service", dest="expansion_service")
+    parser.add_argument("--java_expansion_addr", dest="expansion_service")
+    parser.add_argument("--output", dest="output", default="data/out/counted-by-python")
     params, pipeline_options = parser.parse_known_args()
 
     # Delega os demais argumentos (como --runner, etc.) para o PipelineOptions
@@ -51,4 +52,4 @@ if __name__ == "__main__":
             "Contar" >> beam.CombinePerKey(sum) |
             "TopCinco" >> beam.combiners.Top.Of(5, key=lambda kv: kv[1]) |
             "Formatar" >> beam.FlatMap(format_counts) |
-            "EscreverResultado" >> beam.io.WriteToText("data/out/counted-by-python"))
+            "EscreverResultado" >> beam.io.WriteToText(params.output))

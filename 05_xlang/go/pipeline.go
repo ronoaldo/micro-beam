@@ -22,6 +22,9 @@ var (
 	// Input to load data from
 	file = "gs://dataflow-samples/shakespeare/kinglear.txt"
 
+	// Output to write into
+	output string
+
 	// Word split regular expression
 	wordRE = regexp.MustCompile(`[a-zA-Z]+('[a-z])?`)
 
@@ -109,6 +112,8 @@ func init() {
 		"The expansion server address for Python SDK")
 	flag.StringVar(&javaExpansionAddr, "java_expansion_addr", "",
 		"The expansion server address for Java SDK")
+	flag.StringVar(&output, "output", "data/out/counted-from-go",
+		"The output file to write into")
 
 	// Register Type
 	beam.RegisterType(reflect.TypeOf((*CountedWord)(nil)).Elem())
@@ -133,7 +138,7 @@ func main() {
 	comparableCount := beam.ParDo(s, ToStruct, counts)
 	topFive := top.Largest(s, comparableCount, 5, WordCountComparator)
 	formatted := beam.ParDo(s, FormatCountsFn, topFive)
-	textio.Write(s, "data/out/counted-by-go", formatted)
+	textio.Write(s, output, formatted)
 
 	if err := beamx.Run(context.Background(), p); err != nil {
 		log.Fatalf(ctx, "Failed to execute job: %v", err)
