@@ -25,8 +25,11 @@ var (
 	// Word split regular expression
 	wordRE = regexp.MustCompile(`[a-zA-Z]+('[a-z])?`)
 
-	// Custom pipeline args
-	expansionAddr string
+	// Expansion server for Python
+	pythonExpansionAddr string
+
+	// Expansion server for Java
+	javaExpansionAddr string
 )
 
 func SplitWordsFromGoFn(line string, emit func(string)) {
@@ -50,19 +53,35 @@ func mapkeys(m map[string]beam.PCollection) (keys []string) {
 }
 
 func SplitTransform(ctx context.Context, s beam.Scope, lines beam.PCollection) beam.PCollection {
-	if expansionAddr != "" {
-		log.Infof(ctx, "Using external transform SplitWordsFromPython at %v", expansionAddr)
-		s = s.Scope("Xlang.SplitWordsFromPython")
+	if pythonExpansionAddr != "" {
+		log.Infof(ctx, "Using external transform SplitWordsFromPython at %v", pythonExpansionAddr)
+		s = s.Scope("xlang.split")
 
 		// Wire up the external tranform
-		urn := "beam:transform:ronoaldo:split:v1"
+		urn := "beam:transform:ronoaldo:split_python:v1"
 		// Call xlang using the provided expansion service
 		input := beam.UnnamedInput(lines)
 		outType := beam.UnnamedOutput(typex.New(reflectx.String))
 		output := beam.CrossLanguage(s,
 			urn,
 			nil,
-			expansionAddr,
+			pythonExpansionAddr,
+			input,
+			outType)
+		return output[beam.UnnamedOutputTag()]
+	} else if javaExpansionAddr != "" {
+		log.Infof(ctx, "Using external transform SplitWordsFromJava at %v", javaExpansionAddr)
+		s = s.Scope("xlang.split")
+
+		// Wire up the external tranform
+		urn := "beam:transform:ronoaldo:split_java:v1"
+		// Call xlang using the provided expansion service
+		input := beam.UnnamedInput(lines)
+		outType := beam.UnnamedOutput(typex.New(reflectx.String))
+		output := beam.CrossLanguage(s,
+			urn,
+			nil,
+			javaExpansionAddr,
 			input,
 			outType)
 		return output[beam.UnnamedOutputTag()]
@@ -86,7 +105,10 @@ func WordCountComparator(l, r CountedWord) bool {
 }
 func init() {
 	// Register pipeline input/output flags
-	flag.StringVar(&expansionAddr, "expansion_addr", "", "The external transform to be used")
+	flag.StringVar(&pythonExpansionAddr, "python_expansion_addr", "",
+		"The expansion server address for Python SDK")
+	flag.StringVar(&javaExpansionAddr, "java_expansion_addr", "",
+		"The expansion server address for Java SDK")
 
 	// Register Type
 	beam.RegisterType(reflect.TypeOf((*CountedWord)(nil)).Elem())

@@ -6,7 +6,7 @@ __all__ = [
     "SplitWordsFromPython"
 ]
 
-URN = "beam:transform:ronoaldo:split:v1"
+URN = "beam:transform:ronoaldo:split_python:v1"
 
 class split_with_regex(beam.DoFn):
     def process(self, element, *args, **kwargs):

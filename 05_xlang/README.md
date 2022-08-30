@@ -35,3 +35,9 @@ Em outro terminal, podemos então rodar o Pipeline em Go:
 go run pipeline.go --external_addr localhost:12345
 ```
 
+Não está usando xlang ainda, mas para executar a versão do Java:
+
+```
+mvn -f ./pipeline-java/ clean compile exec:java \
+    -Dexec.mainClass=ronoaldo.MinimalWordCount -Pdirect-runner
+```
