@@ -1,9 +1,19 @@
-# Cross-lang Python > Go (Beta)
+# Pipelines Multi-linguagem (Beta)
 
-Esse é um pequeno exemplo de rodar uma pipeline em Go usando uma PTransform/DoFn
-escrita em Python. Ainda está em desenvolvimento, não está concluído mas foi
-implementado seguindo a documentação de como export uma PTransform em Python e
-como consumir PTransform em Go.
+Esse é um pequeno exemplo de rodar uma pipeline em Python usando uma PTransform/DoFn
+escrita em Java. Ainda está em desenvolvimento, não está concluído mas foi
+implementado seguindo a documentação de como export uma PTransform em Java e
+como consumir PTransform em Python.
+
+Está em estudo/desenvolvimento pelo Apache Beam outras direções da API de
+portabilidade. Algumas considerações:
+
+- É facilmente suportado e facilidado consumir PTransforms em Java;
+  por exemplo, o Expansion Service do Java já consegue descrever todos
+  os artefatos (.jar) necessários e enviar como parte da submissão para
+  o Runner (como o Dataflow Runner)
+- É teoricamente possível consumir PTransforms de Java/Python em Go, mas
+  eu ainda não consegui executar (Veja: [esse issue](https://github.com/apache/beam/issues/22931))
 
 ## Setup
 
