@@ -1,12 +1,18 @@
 steps:
-  # Install dependencies
-  - name: python
+  # Install python dependencies
+  - name: python:3.11
     entrypoint: pip
     args: ["install", "-r", "requirements.txt", "--user"]
-  # Run tests
-  - name: python
+  # Run python tests
+  - name: python:3.11
     entrypoint: python
     args: ["-m", "pytest", "--junitxml=${SHORT_SHA}_test_log.xml"]
+  # Build go binary
+  - name: golang:1.21
+    args: ["go", "build", "-buildvcs=false", "-x", "./..."]
+  # Run go package tests
+  - name: golang:1.21
+    args: ["go", "test", "./..."]
 
 artifacts:
   objects:

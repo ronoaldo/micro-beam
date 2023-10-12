@@ -7,3 +7,7 @@ __pycache__
 .vscode
 *.egg-info
 dist
+
+*_test_log.xml
+/go
+/data
