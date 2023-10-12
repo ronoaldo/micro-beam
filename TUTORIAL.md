@@ -78,7 +78,7 @@ e instalar o Apache Beam 2.41.0:
 
 ```sh
 pip install --upgrade pip
-pip install apache-beam[gcp]==2.41.0
+pip install -r requirements.txt
 ```
 
 Ele irá exibir diversas mensagens na tela e no final você deve ver
