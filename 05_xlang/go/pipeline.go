@@ -48,13 +48,6 @@ func FormatCountsFn(top []CountedWord, emit func(string)) {
 	}
 }
 
-func mapkeys(m map[string]beam.PCollection) (keys []string) {
-	for k, _ := range m {
-		keys = append(keys, k)
-	}
-	return
-}
-
 func SplitTransform(ctx context.Context, s beam.Scope, lines beam.PCollection) beam.PCollection {
 	if pythonExpansionAddr != "" {
 		log.Infof(ctx, "Using external transform SplitWordsFromPython at %v", pythonExpansionAddr)

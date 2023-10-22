@@ -1,13 +1,12 @@
-*/data/out/*
+**/data/out/
 env
 env/*
 __pycache__
 .pytest_cache
 **/target/
-.vscode
 *.egg-info
 dist
-
+*__debug_*
 *_test_log.xml
 /go
 /data
