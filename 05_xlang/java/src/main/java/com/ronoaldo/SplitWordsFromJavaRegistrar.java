@@ -4,8 +4,7 @@ import java.util.Map;
 
 import org.apache.beam.sdk.expansion.ExternalTransformRegistrar;
 import org.apache.beam.sdk.transforms.ExternalTransformBuilder;
-import org.apache.beam.vendor.guava.v26_0_jre.com.google.common.collect.ImmutableMap;
-
+import com.google.common.collect.ImmutableMap;
 import com.google.auto.service.AutoService;
 
 @AutoService(ExternalTransformRegistrar.class)

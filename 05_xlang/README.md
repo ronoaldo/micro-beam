@@ -26,7 +26,7 @@ Por exemplo, a partir do diretório inicial do projeto:
 ```
 python3 -m virtualenv env
 source env/bin/activate
-pip install -r ../requirements.txt
+pip install -r ./requirements.txt
 ```
 
 Para o Java, foi testado Java 11 e Maven 3.6.

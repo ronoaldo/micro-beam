@@ -99,6 +99,7 @@ func ToStruct(w string, c int) CountedWord {
 func WordCountComparator(l, r CountedWord) bool {
 	return l.Count < r.Count
 }
+
 func init() {
 	// Register pipeline input/output flags
 	flag.StringVar(&pythonExpansionAddr, "python_expansion_addr", "",
