@@ -13,6 +13,7 @@ import (
 	"github.com/apache/beam/sdks/v2/go/pkg/beam/core/util/reflectx"
 	"github.com/apache/beam/sdks/v2/go/pkg/beam/io/textio"
 	"github.com/apache/beam/sdks/v2/go/pkg/beam/log"
+	"github.com/apache/beam/sdks/v2/go/pkg/beam/register"
 	"github.com/apache/beam/sdks/v2/go/pkg/beam/transforms/stats"
 	"github.com/apache/beam/sdks/v2/go/pkg/beam/transforms/top"
 	"github.com/apache/beam/sdks/v2/go/pkg/beam/x/beamx"
@@ -117,6 +118,9 @@ func init() {
 	beam.RegisterDoFn(FormatCountsFn)
 	beam.RegisterDoFn(ToStruct)
 
+	// Register comparable function for proper serialization
+	// Ref: https://github.com/apache/beam/issues/29180
+	register.Function2x1(WordCountComparator)
 }
 
 func main() {

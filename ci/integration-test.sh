@@ -2,6 +2,7 @@
 set -e
 
 FAIL=0
+GO_RUNNER="${GO_RUNNER:-direct}"
 
 # Show info message
 info() {
@@ -46,10 +47,10 @@ run_pipeline() {
 
     # Using the direct runner until https://github.com/apache/beam/issues/29180 gets fixed
     if [ -f pipeline.go ]; then
-        go run pipeline.go --runner=direct || error "--- FAIL: pipeline.go $dir"
+        go run pipeline.go --runner=${GO_RUNNER} || error "--- FAIL: pipeline.go $dir"
     fi
     if [ -f go/pipeline.go ]; then
-        go run go/pipeline.go --runner=direct || error "--- FAIL: go/pipeline.go $dir"
+        go run go/pipeline.go --runner=${GO_RUNNER} || error "--- FAIL: go/pipeline.go $dir"
     fi
 
     popd || exit 1
